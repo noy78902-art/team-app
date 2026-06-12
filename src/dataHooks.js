@@ -38,11 +38,8 @@ export function useMessages() {
 
   useEffect(() => {
     refresh()
-    const channel = supabase
-      .channel('messages-changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, refresh)
-      .subscribe()
-    return () => { supabase.removeChannel(channel) }
+    const interval = setInterval(refresh, 3000)
+    return () => clearInterval(interval)
   }, [refresh])
 
   const sendMessage = async (who, text) => {
